@@ -26,7 +26,8 @@ idnum <- views[1,1]
 # get view id from first column of ga_profilecols table, based on view name
 idrow <- filter(ga_profilecols,name==viewname)
 idnum <- as.character(idrow[1,1])
-# set start and end dates
+
+# SET DATES: start and end dates
 startdate <- "2016-05-01"
 enddate <- "2016-05-31"
 
@@ -43,14 +44,15 @@ avgtos <- "ga:avgTimeOnSite"
 eventt <- "ga:totalEvents"
 eventu <- "ga:uniqueEvents"
 ## combine as desired
-metrics <- paste(c(pv,bounces),collapse=",")
+metrics <- paste(c(users,sess,pv,avgtos),collapse=",")
 
 ## SELECT DIMENSIONS
 ## general list
 gadate <- "ga:date"
 pages <- "ga:pagePath"
+gahour <- "ga:hour"
 ## combine as desired
-dimensions <- paste(c(pages))
+dimensions <- paste(c(gadate))
 
 ## APPLY FILTERS
 
@@ -65,16 +67,20 @@ ga_data <- get_ga(idnum2, start.date = startdate, end.date = enddate,
                   filters="",)
 ga_data$view <- viewname # add view name to data set for clarity
 
+## Quick table of totals using dplyr
+ga_data %>% summarize(uttl=sum(users),
+                      sttl=sum(sessions),
+                      pvttl=sum(pageviews))
+## Quick chart of users using ggplot
+ggplot(ga_data,aes(x=date,y=users))+geom_line()+theme_bw()
+
 ## Example: pageviews by page for period
-ga_data <- get_ga(idnum2, start.date = startdate, end.date = enddate,
+metrics <- paste(c(pv,bounces),collapse=",")
+dimensions <- paste(c(pages))
+pages <- get_ga(idnum2, start.date = startdate, end.date = enddate,
                   metrics = metrics,
                   dimensions = dimensions,
                   segment="",
                   filters="",)
-ga_data$view <- viewname # add view name to data set for clarity
+pages$view <- viewname # add view name to data set for clarity
 
-unique(ga_data$pagePath)
-summary(ga_data$pageviews)
-sd(ga_data$pageviews)
-hist(ga_data$pageviews)
-ggplot(ga_data,aes)
