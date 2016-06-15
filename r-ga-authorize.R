@@ -13,7 +13,11 @@
 ## Need to get Google API CLIENT.ID and CLIENT SECRET
 ## to authorize use of API by requesting access to your account via browser 
 ## best way is with client.id and client secret
-## Go to Google Developers Console and either set up credentials (if not already set up) or grab existing credentials
+## Go to Google Developers Console and either set up credentials
+## (if not already set up) or grab existing credentials
+
+##### https://console.developers.google.com 
+
 ## A. Set up credentials - if needed, otherwise skip to B.
 ##   1. Go to Google Developers Console > Create or Select a Project
 ##   2. Enabled APIs > Enable Analytics API (if not already - else, skip to B.)
