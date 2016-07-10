@@ -7,10 +7,13 @@ library(googleAuthR)
 library(googleAnalyticsR)
 library(dplyr)
 
-options("googleAuthR.client_id" = "553048728025-tel41p2njvq0afl561lg2et405l433mv.apps.googleusercontent.com")
-options("googleAuthR.client_secret" = "wAr4nbY83-xcwu5f17ZiuB-h")
-options("googleAuthR.scopes.selected" = c("https://www.googleapis.com/auth/analytics",
-                                          "https://www.googleapis.com/auth/analytics.readonly"))
+### Set gar_auth() options for credentials
+### Stored separately to avoid exposing in Github
+### Run separate file with actual credentials
+## options("googleAuthR.client_id" = "your clientid")
+## options("googleAuthR.client_secret" = "your secret")
+## options("googleAuthR.scopes.selected" = c("https://www.googleapis.com/auth/analytics",
+##                                          "https://www.googleapis.com/auth/analytics.readonly"))
 
 googleAuthR::gar_auth()
 
@@ -27,11 +30,56 @@ ga_id <- account_list %>% filter(viewName=="01 SWBF") %>% select(viewId)
 ## filter for rows, find viewid or name and use one of the commands above
 ga_idsearch <- account_list %>% filter(grepl("FIFA",viewName))
 
+### simplest query
 gadata <- google_analytics(id = ga_id,
                            start="2016-06-01", end="2016-06-02",
                            metrics = c("sessions", "bounceRate"),
                            dimensions = c("source", "medium"),
-                           max=150)
+                           max=150) ## default max=100
+
+### query 2: creating variables outside query for ease of use/reuse
+start <- "2016-06-15"
+end <- "2016-06-15"
+
+metrics <- c("sessions","bounces","bounceRate")
+dimensions <- c("date","medium")
+
+gadata <- google_analytics(id = ga_id,
+                           start="2016-06-01", end="2016-06-02",
+                           metrics = c("sessions", "bounceRate"),
+                           dimensions = c("source", "medium"),
+                           max=150) ## default max=100
+
+
+### query 3: creating lists of possible variables for reference
+start <- "2016-06-15"
+end <- "2016-06-20"
+
+## metrics
+sess <- "sessions"
+pv <- "pageviews"
+upv <- "uniquePageviews"
+bounces <- "bounces"
+br <- "bounceRate"
+
+metrics <- c(pv, upv)
+
+## dimensions
+dt <- "date"
+yr <- "year"
+mth <- "month"
+med <- "medium"
+pg <- "pagePath"
+
+dimensions <- c(dt,pg)
+
+gadata <- google_analytics(id = ga_id,
+                           start=start, end=end,
+                           metrics = metrics,
+                           dimensions = dimensions,
+                           max=150) ## default max=100
+
+
 
 
 

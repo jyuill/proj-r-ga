@@ -2,3 +2,5 @@
 .Rhistory
 .RData
 .ga-token.rds
+.httr-oauth
+GA-API-Credentials.R
