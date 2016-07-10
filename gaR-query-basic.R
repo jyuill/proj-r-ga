@@ -39,21 +39,21 @@ gadata <- google_analytics(id = ga_id,
 
 ### query 2: creating variables outside query for ease of use/reuse
 start <- "2016-06-15"
-end <- "2016-06-15"
+end <- "2016-06-21"
 
 metrics <- c("sessions","bounces","bounceRate")
 dimensions <- c("date","medium")
 
 gadata <- google_analytics(id = ga_id,
-                           start="2016-06-01", end="2016-06-02",
-                           metrics = c("sessions", "bounceRate"),
-                           dimensions = c("source", "medium"),
+                           start=start, end=end,
+                           metrics = metrics,
+                           dimensions = dimensions,
                            max=150) ## default max=100
 
 
 ### query 3: creating lists of possible variables for reference
 start <- "2016-06-15"
-end <- "2016-06-20"
+end <- "2016-06-15"
 
 ## metrics
 sess <- "sessions"
