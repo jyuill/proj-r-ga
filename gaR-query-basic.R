@@ -2,6 +2,8 @@
 ### allows for use of API v4
 ### https://cran.r-project.org/web/packages/googleAnalyticsR/googleAnalyticsR.pdf
 ### https://cran.r-project.org/web/packages/googleAnalyticsR/vignettes/googleAnalyticsR.html
+### http://code.markedmondson.me/googleAnalyticsR/index.html 
+
 
 library(googleAuthR)
 library(googleAnalyticsR)
@@ -15,7 +17,8 @@ library(dplyr)
 ## options("googleAuthR.scopes.selected" = c("https://www.googleapis.com/auth/analytics",
 ##                                          "https://www.googleapis.com/auth/analytics.readonly"))
 
-googleAuthR::gar_auth()
+googleAuthR::gar_auth() ## actually works fine without options - need to investigate... 
+## ...to ensure works with options
 
 account_list <- google_analytics_account_list()
 
@@ -43,12 +46,10 @@ end <- "2016-06-21"
 metrics <- c("sessions","bounces","bounceRate")
 dimensions <- c("date","medium")
 
-gadata <- google_analytics(id = ga_id,
-                           start=start, end=end,
-                           metrics = metrics,
-                           dimensions = dimensions,
-                           max=150) ## default max=100
-
+ga_data <- google_analytics_4(ga_id,
+                              date_range = c(start,end),
+                              metrics=metrics,
+                              dimensions=dimension)
 
 ### query 3: creating lists of possible variables for reference
 start <- "2016-06-15"
@@ -72,11 +73,11 @@ pg <- "pagePath"
 
 dimensions <- c(dt,pg)
 
-gadata <- google_analytics(id = ga_id,
-                           start=start, end=end,
-                           metrics = metrics,
-                           dimensions = dimensions,
-                           max=150) ## default max=100
+ga_data <- google_analytics_4(ga_id,
+                              date_range = c(start,end),
+                              metrics=metrics,
+                              dimensions=dimensions)
+
 
 ### query 4: filters
 start <- "2016-06-15"
