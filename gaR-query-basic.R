@@ -104,25 +104,24 @@ med <- "medium"
 src <- "source"
 pg <- "pagePath"
 
-dimensions <- c(dt,src)
+dimensions <- c(dt,pg)
 
 ## create filters on dimensions
-df <- dim_filter(src,"BEGINS_WITH","e",not=FALSE)
-df2 <- dim_filter("source","BEGINS_WITH","ea",not = TRUE)
+df <- dim_filter(pg,"REGEX","news",not=FALSE)
+#df2 <- dim_filter("source","BEGINS_WITH","ea",not = TRUE)
 
 ## construct filter objects
 # fcd <- filter_clause_ga4(list(df, df2), operator = "AND")
 # fcm <- filter_clause_ga4(list(mf, mf2), operator = "AND")
 fcm <- filter_clause_ga4(list(mf))
-fcd <- filter_clause_ga4(list(df,df2),operator = "AND")
+fcd <- filter_clause_ga4(list(df))
 
-gadata <- google_analytics(id = ga_id,
-                           start=start, end=end,
-                           metrics = metrics,
-                           dimensions = dimensions,
-                           #met_filters = fcm,
-                           dim_filters = fcd,
-                           max=150) ## default max=100
+ga_data <- google_analytics_4(ga_id,
+                              date_range = c(start,end),
+                              metrics=metrics,
+                              dimensions=dimensions,
+                              met_filters=fcm,
+                              dim_filters=fcd)
 
 
 ## create filters on metrics
