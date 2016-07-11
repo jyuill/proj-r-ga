@@ -233,6 +233,7 @@ fcd <- filter_clause_ga4(list(df))
 # order_type(field, sort_order = c("ASCENDING", "DESCENDING"),
 #            orderType = c("VALUE", "DELTA", "SMART", "HISTOGRAM_BUCKET",
 #                          "DIMENSION_AS_INTEGER"))
+?order_type
 
 ord1 <- order_type(dt,sort_order="ASCENDING", orderType="VALUE")
 ord2 <- order_type(pv, sort_order="DESCENDING", orderType="VALUE")
@@ -245,7 +246,6 @@ ordg <- order_type(field=c(dt,pv),sort_order=c("ASCENDING","DESCENDING"),orderTy
 
 ord <- order_type(list((dt,sort_order="ASCENDING",orderType="VALUE"),
                      (pv,sort_order="DESCENDING",orderType="VALUE")))
-order
 
 ga_data <- google_analytics_4(ga_id,
                               date_range = c(start,end),
