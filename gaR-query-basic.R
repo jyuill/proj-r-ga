@@ -136,7 +136,7 @@ ga_data <- google_analytics_4(ga_id,
 # fc <- filter_clause_ga4(list(mf, mf2), operator = "AND")
 ######## END OF EXAMPLE CODE
 
-### query 5: ordering results
+### query 5: ordering results - single parameter
 start <- "2016-06-15"
 end <- "2016-06-15"
 
@@ -189,3 +189,68 @@ ga_data <- google_analytics_4(ga_id,
                               met_filters=fcm,
                               dim_filters=fcd,
                               order=ord)
+
+### query 6: ordering results - mutliple parameter: CAN'T FIGURE OUT!!!
+start <- "2016-06-15"
+end <- "2016-06-16"
+
+## metrics
+sess <- "sessions"
+pv <- "pageviews"
+upv <- "uniquePageviews"
+ent <- "entrances"
+bounces <- "bounces"
+br <- "bounceRate"
+exit <- "exits"
+
+metrics <- c(pv,upv,bounces)
+
+## create filters on metrics
+mf <- met_filter(pv, "GREATER_THAN", 10)
+#mf2 <- met_filter("sessions", "GREATER", 2)
+
+## dimensions
+dt <- "date"
+yr <- "year"
+mth <- "month"
+med <- "medium"
+src <- "source"
+pg <- "pagePath"
+
+dimensions <- c(dt,pg)
+
+## create filters on dimensions
+df <- dim_filter(pg,"REGEX","news",not=FALSE)
+#df2 <- dim_filter("source","BEGINS_WITH","ea",not = TRUE)
+
+## construct filter objects
+# fcd <- filter_clause_ga4(list(df, df2), operator = "AND")
+# fcm <- filter_clause_ga4(list(mf, mf2), operator = "AND")
+fcm <- filter_clause_ga4(list(mf))
+fcd <- filter_clause_ga4(list(df))
+
+## construct order type object in format of example:
+# order_type(field, sort_order = c("ASCENDING", "DESCENDING"),
+#            orderType = c("VALUE", "DELTA", "SMART", "HISTOGRAM_BUCKET",
+#                          "DIMENSION_AS_INTEGER"))
+
+ord1 <- order_type(dt,sort_order="ASCENDING", orderType="VALUE")
+ord2 <- order_type(pv, sort_order="DESCENDING", orderType="VALUE")
+ord3 <- order_type(dt,sort_order="ASCENDING",orderType="VALUE",
+                   pv,sort_order="DESCENDING",orderType="VALUE")
+orda <- c(dt,sort_order="ASCENDING", orderType="VALUE")
+ordb <- c(pv,sort_order="DESCENDING",orderType="VALUE")
+ordc <- order_type(orda,ordb)
+ordg <- order_type(field=c(dt,pv),sort_order=c("ASCENDING","DESCENDING"),orderType=c("VALUE","VALUE"))
+
+ord <- order_type(list((dt,sort_order="ASCENDING",orderType="VALUE"),
+                     (pv,sort_order="DESCENDING",orderType="VALUE")))
+order
+
+ga_data <- google_analytics_4(ga_id,
+                              date_range = c(start,end),
+                              metrics=metrics,
+                              dimensions=dimensions,
+                              met_filters=fcm,
+                              dim_filters=fcd,
+                              order=ord1)
