@@ -1,4 +1,4 @@
-### GA API QUery with googleAnalyticsR pkg
+### GA API Query with googleAnalyticsR pkg - Page data for date range
 ### allows for use of API v4
 ### https://cran.r-project.org/web/packages/googleAnalyticsR/googleAnalyticsR.pdf
 ### https://cran.r-project.org/web/packages/googleAnalyticsR/vignettes/googleAnalyticsR.html
@@ -21,10 +21,11 @@ googleAuthR::gar_auth() ## will work without above options, but better for API q
 account_list <- google_analytics_account_list()
 
 ## SELECT VIEW
-ga_id <- account_list %>% filter(viewName=="01 SWBF") %>% select(viewId)
+
+ga_id <- account_list %>% filter(viewName=="1BC Beer Main") %>% select(viewId)
 
 
-### query 5: filtering and ordering results - single parameter
+### query: filtering and ordering results
 start <- "2015-06-01"
 end <- "2015-12-31"
 
@@ -40,7 +41,7 @@ exit <- "exits"
 metrics <- c(pv,upv,ent,bounces,exit)
 
 ## create filters on metrics
-mf <- met_filter(pv, "GREATER_THAN", 10)
+mf <- met_filter(pv, "GREATER_THAN", 20)
 #mf2 <- met_filter("sessions", "GREATER", 2)
 
 ## dimensions
@@ -54,7 +55,7 @@ pg <- "pagePath"
 dimensions <- c(pg)
 
 ## create filters on dimensions
-df <- dim_filter(pg,"REGEX","news",not=FALSE)
+df <- dim_filter(pg,"REGEX","brewery",not=FALSE)
 #df2 <- dim_filter("source","BEGINS_WITH","ea",not = TRUE)
 
 ## construct filter objects
@@ -79,11 +80,13 @@ ga_data <- google_analytics_4(ga_id,
                               order=ord,
                               max=10000)
 
-### remove metrics
-pgs <- ga_data %>% select(pagePath)
-pgs <- pgs %>% filter(grepl("starwars.ea.com",pagePath))
-pgs2 <- pgs
-pgs2 <- pgs2 %>% filter(!grepl("newsletter",pagePath))
+### filter out undesirables
+ga_data <- ga_data %>%
+  filter(!grepl("error",pagePath))
 
-write.csv(pgs,"swbf-pgs.csv",row.names=FALSE)
+
+vname <- account_list %>% filter(viewId==as.character(ga_id)) %>% select(viewName)
+vname <- gsub(" ", "-", vname, fixed = TRUE)
+fname <- paste(vname,"_pgs_",start,"_",end,".csv",sep="")
+write.csv(ga_data,fname,row.names=FALSE)
 

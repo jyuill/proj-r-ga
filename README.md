@@ -1,12 +1,10 @@
 # proj-r-ga
 Using R with Google Analytics
 
-Initial Setup for first-time use
-1. Get RGA package
-2. Get Google API client.id and client secret
-3. Authorize using RGA package
-4. Test by getting list of GA accounts/properties/views associated with credentials
-5. Run queries and analyze data!
+Examples include different packages:
+1. googleanalyticsR - preferred - uses API v4
+2. RGA - older one that works
+
 
 
 

@@ -1,3 +1,6 @@
+##### PREFERRED: USE googleanalyticsR package - example files gaR...
+####### leverages API v4 and other newer features
+
 ### R + GOOGLE ANALYTICS: QUERY
 #### Using RGA Package developed by Artem Klevtsov
 #### THIS FILE ASSUMES AUTHORIZATION HAS ALREADY BEEN DONE

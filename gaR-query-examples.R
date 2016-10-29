@@ -1,4 +1,4 @@
-### GA API QUery with googleAnalyticsR pkg
+### GA API QUery EXAMPLES with googleAnalyticsR pkg
 ### allows for use of API v4
 ### https://cran.r-project.org/web/packages/googleAnalyticsR/googleAnalyticsR.pdf
 ### https://cran.r-project.org/web/packages/googleAnalyticsR/vignettes/googleAnalyticsR.html
@@ -22,19 +22,22 @@ googleAuthR::gar_auth() ## will work without above options, but better for API q
 account_list <- google_analytics_account_list()
 
 ## pick a profile with data to query
+## if you want to view account list and maybe copy a reference for use in one of the options below
+view(account_list)
 ## if you know the row of the viewId
-ga_id <- account_list[23,'viewId']
+ga_id <- account_list[3,'viewId']
 ## if you know the viewid
-ga_id <- account_list %>% filter(viewId=="85175041") %>% select(viewId)
+ga_id <- account_list %>% filter(viewId=="6571219") %>% select(viewId)
 ## if you know the name of the view
-ga_id <- account_list %>% filter(viewName=="01 SWBF") %>% select(viewId)
+ga_id <- account_list %>% filter(viewName=="1BC Beer Main") %>% select(viewId)
 ## if you know the general name of view and want to search
 ## filter for rows, find viewid or name and use one of the commands above
-ga_idsearch <- account_list %>% filter(grepl("FIFA",viewName))
+ga_idsearch <- account_list %>% filter(grepl("BC Beer",viewName))
 
-### simplest query API v4
+
+### query 1: simplest query API v4
 ga_data <- google_analytics_4(ga_id,
-                              date_range = c("2016-06-01","2016-06-02"),
+                              date_range = c("2016-10-01","2016-10-10"),
                               dimensions=c('source','medium'),
                               metrics = c('sessions','bounces'))
 
@@ -51,8 +54,8 @@ ga_data <- google_analytics_4(ga_id,
                               dimensions=dimensions)
 
 ### query 3: creating lists of possible variables for reference
-start <- "2016-06-15"
-end <- "2016-06-15"
+start <- "2016-10-10"
+end <- "2016-10-10"
 
 ## metrics
 sess <- "sessions"
@@ -94,7 +97,7 @@ exit <- "exits"
 metrics <- c(pv,upv,bounces)
 
 ## create filters on metrics
-mf <- met_filter(pv, "GREATER_THAN", 10)
+mf <- met_filter(pv, "GREATER_THAN", 2)
 #mf2 <- met_filter("sessions", "GREATER", 2)
 
 ## dimensions
@@ -108,8 +111,8 @@ pg <- "pagePath"
 dimensions <- c(dt,pg)
 
 ## create filters on dimensions
-df <- dim_filter(pg,"REGEX","news",not=FALSE)
-#df2 <- dim_filter("source","BEGINS_WITH","ea",not = TRUE)
+df <- dim_filter(pg,"REGEX","brewery",not=FALSE)
+#df2 <- dim_filter("source","BEGINS_WITH","brew",not = TRUE)
 
 ## construct filter objects
 # fcd <- filter_clause_ga4(list(df, df2), operator = "AND")
@@ -125,7 +128,7 @@ ga_data <- google_analytics_4(ga_id,
                               dim_filters=fcd)
 
 
-####### EXAMPLE CODE: create filters on mutliple metrics and dimensions
+####### FILTER EXAMPLE: create filters on mutliple metrics and dimensions
 # mf <- met_filter("bounces", "GREATER_THAN", 0)
 # mf2 <- met_filter("sessions", "GREATER", 2)
 # ## create filters on dimensions
@@ -152,7 +155,7 @@ exit <- "exits"
 metrics <- c(pv,upv,bounces)
 
 ## create filters on metrics
-mf <- met_filter(pv, "GREATER_THAN", 10)
+mf <- met_filter(pv, "GREATER_THAN", 1)
 #mf2 <- met_filter("sessions", "GREATER", 2)
 
 ## dimensions
@@ -166,7 +169,7 @@ pg <- "pagePath"
 dimensions <- c(dt,pg)
 
 ## create filters on dimensions
-df <- dim_filter(pg,"REGEX","news",not=FALSE)
+df <- dim_filter(pg,"REGEX","brewery",not=FALSE)
 #df2 <- dim_filter("source","BEGINS_WITH","ea",not = TRUE)
 
 ## construct filter objects
@@ -190,67 +193,4 @@ ga_data <- google_analytics_4(ga_id,
                               dim_filters=fcd,
                               order=ord)
 
-### query 6: ordering results - mutliple parameter: CAN'T FIGURE OUT!!!
-start <- "2016-06-15"
-end <- "2016-06-16"
 
-## metrics
-sess <- "sessions"
-pv <- "pageviews"
-upv <- "uniquePageviews"
-ent <- "entrances"
-bounces <- "bounces"
-br <- "bounceRate"
-exit <- "exits"
-
-metrics <- c(pv,upv,bounces)
-
-## create filters on metrics
-mf <- met_filter(pv, "GREATER_THAN", 10)
-#mf2 <- met_filter("sessions", "GREATER", 2)
-
-## dimensions
-dt <- "date"
-yr <- "year"
-mth <- "month"
-med <- "medium"
-src <- "source"
-pg <- "pagePath"
-
-dimensions <- c(dt,pg)
-
-## create filters on dimensions
-df <- dim_filter(pg,"REGEX","news",not=FALSE)
-#df2 <- dim_filter("source","BEGINS_WITH","ea",not = TRUE)
-
-## construct filter objects
-# fcd <- filter_clause_ga4(list(df, df2), operator = "AND")
-# fcm <- filter_clause_ga4(list(mf, mf2), operator = "AND")
-fcm <- filter_clause_ga4(list(mf))
-fcd <- filter_clause_ga4(list(df))
-
-## construct order type object in format of example:
-# order_type(field, sort_order = c("ASCENDING", "DESCENDING"),
-#            orderType = c("VALUE", "DELTA", "SMART", "HISTOGRAM_BUCKET",
-#                          "DIMENSION_AS_INTEGER"))
-?order_type
-
-ord1 <- order_type(dt,sort_order="ASCENDING", orderType="VALUE")
-ord2 <- order_type(pv, sort_order="DESCENDING", orderType="VALUE")
-ord3 <- order_type(dt,sort_order="ASCENDING",orderType="VALUE",
-                   pv,sort_order="DESCENDING",orderType="VALUE")
-orda <- c(dt,sort_order="ASCENDING", orderType="VALUE")
-ordb <- c(pv,sort_order="DESCENDING",orderType="VALUE")
-ordc <- order_type(orda,ordb)
-ordg <- order_type(field=c(dt,pv),sort_order=c("ASCENDING","DESCENDING"),orderType=c("VALUE","VALUE"))
-
-ord <- order_type(list((dt,sort_order="ASCENDING",orderType="VALUE"),
-                     (pv,sort_order="DESCENDING",orderType="VALUE")))
-
-ga_data <- google_analytics_4(ga_id,
-                              date_range = c(start,end),
-                              metrics=metrics,
-                              dimensions=dimensions,
-                              met_filters=fcm,
-                              dim_filters=fcd,
-                              order=ord1)
