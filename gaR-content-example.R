@@ -26,8 +26,8 @@ ga_id <- account_list %>% filter(viewName=="1BC Beer Main") %>% select(viewId)
 
 
 ### query: filtering and ordering results
-start <- "2015-06-01"
-end <- "2015-12-31"
+start <- "2018-06-01"
+end <- "2018-11-30"
 
 ## metrics
 sess <- "sessions"
@@ -71,7 +71,7 @@ fcd <- filter_clause_ga4(list(df))
 
 ord <- order_type(pv, sort_order="DESCENDING", orderType="VALUE")
 
-ga_data <- google_analytics_4(ga_id,
+ga_data <- google_analytics(ga_id,
                               date_range = c(start,end),
                               metrics=metrics,
                               dimensions=dimensions,
