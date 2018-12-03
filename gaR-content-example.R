@@ -16,6 +16,10 @@ library(dplyr)
 ## options("googleAuthR.scopes.selected" = c("https://www.googleapis.com/auth/analytics",
 ##                                          "https://www.googleapis.com/auth/analytics.readonly"))
 
+options("googleAuthR.client_id"=Sys.getenv("GA_CLIENT_ID"))
+option("googleAouthR.client_secret"=Sys.getenv("GA_CLIENT_SECRET"))
+options("googleAuthR.scopes.selected" = c("https://www.googleapis.com/auth/analytics",
+                                          "https://www.googleapis.com/auth/analytics.readonly"))
 
 googleAuthR::gar_auth() ## will work without above options, but better for API quotas 
 
