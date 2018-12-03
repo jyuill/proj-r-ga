@@ -16,9 +16,10 @@ library(dplyr)
 ## options("googleAuthR.scopes.selected" = c("https://www.googleapis.com/auth/analytics",
 ##                                          "https://www.googleapis.com/auth/analytics.readonly"))
 
+
 googleAuthR::gar_auth() ## will work without above options, but better for API quotas 
 
-account_list <- google_analytics_account_list()
+account_list <- ga_account_list()
 
 ## SELECT VIEW
 
