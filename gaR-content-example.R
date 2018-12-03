@@ -17,7 +17,7 @@ library(dplyr)
 ##                                          "https://www.googleapis.com/auth/analytics.readonly"))
 
 options("googleAuthR.client_id"=Sys.getenv("GA_CLIENT_ID"))
-option("googleAouthR.client_secret"=Sys.getenv("GA_CLIENT_SECRET"))
+options("googleAouthR.client_secret"=Sys.getenv("GA_CLIENT_SECRET"))
 options("googleAuthR.scopes.selected" = c("https://www.googleapis.com/auth/analytics",
                                           "https://www.googleapis.com/auth/analytics.readonly"))
 
